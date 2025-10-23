@@ -1,0 +1,89 @@
+/* === Global === */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #121212;
+    color: #f0f0f0;
+}
+
+/* === Navbar tweaks === */
+.navbar {
+    background-color: #1e1e1e !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.navbar-brand {
+    font-weight: 600;
+    color: #00d4ff !important;
+    text-shadow: 0 0 4px #00d4ff;
+}
+
+.nav-link {
+    color: #00ffcc !important;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #00d4ff !important;
+    text-shadow: 0 0 6px #00d4ff;
+}
+
+/* === Cards === */
+.card {
+    background-color: #1e1e1e;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,255,204,0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0,255,204,0.3);
+}
+
+/* === Form Inputs === */
+.form-control {
+    background-color: rgba(255,255,255,0.08);
+    color: #fff;
+    border: 1px solid #00ffcc;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: rgba(255,255,255,0.12);
+    border-color: #00d4ff;
+    box-shadow: 0 0 8px rgba(0,212,255,0.3);
+    color: #fff;
+}
+
+/* === Buttons === */
+.btn-primary {
+    background: linear-gradient(90deg, #00ffcc, #00d4ff);
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,212,255,0.5);
+}
+
+/* === Footer === */
+footer {
+    color: #00ffcc;
+    text-align: center;
+    padding: 1rem 0;
+    border-top: 1px solid rgba(0,255,204,0.2);
+}
+
+/* === Responsive tweaks === */
+@media (max-width: 420px) {
+    .card {
+        width: 90%;
+        margin: auto;
+    }
+    .navbar-nav {
+        text-align: center;
+    }
+}

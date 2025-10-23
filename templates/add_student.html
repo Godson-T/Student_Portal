@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+<div class="card mx-auto shadow" style="max-width: 500px;">
+  <div class="card-body">
+    <h3 class="card-title mb-4 text-center">Add a New Student</h3>
+    <form method="POST" action="/add_students">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" name="name" class="form-control" required placeholder="John Doe">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" required placeholder="example@gmail.com">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Course</label>
+        <select name="course" class="form-select" required>
+            <option value="" disabled selected>Select a course</option>
+          <option value="AL/ML">ALML</option>
+          <option value="Web Development">Web Development</option>
+          <option value="Data Science">Data Science</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+    <label class="form-label">Year</label>
+    <select name="year" class="form-select" required>
+
+        <option value="" disabled selected>Select year</option>
+        <option value="I">I</option>
+        <option value="II">II</option>
+        <option value="III">III</option>
+        <option value="IV">IV</option>
+    </select>
+</div>
+
+
+      <button type="submit" class="btn btn-primary w-100">Add Student</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
