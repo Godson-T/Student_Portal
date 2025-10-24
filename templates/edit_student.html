@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="card mx-auto shadow" style="max-width: 500px;">
+  <div class="card-body">
+    <h3 class="card-title mb-4 text-center">Edit Student</h3>
+    <form method="POST" action="/edit/{{ student.id }}">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" name="name" class="form-control" required value="{{ student.name }}">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" required value="{{ student.email }}">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Course</label>
+        <select name="course" class="form-select" required>
+          <option value="AL/ML" {% if student.course == "AL/ML" %}selected{% endif %}>AL/ML</option>
+          <option value="Web Development" {% if student.course == "Web Development" %}selected{% endif %}>Web Development</option>
+          <option value="Data Science" {% if student.course == "Data Science" %}selected{% endif %}>Data Science</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Year</label>
+        <select name="year" class="form-select" required>
+          <option value="I" {% if student.year == 1 %}selected{% endif %}>I</option>
+          <option value="II" {% if student.year == 2 %}selected{% endif %}>II</option>
+          <option value="III" {% if student.year == 3 %}selected{% endif %}>III</option>
+          <option value="IV" {% if student.year == 4 %}selected{% endif %}>IV</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Update Student</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
