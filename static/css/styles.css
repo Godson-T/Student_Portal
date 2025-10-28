@@ -3,84 +3,139 @@ body {
     font-family: 'Poppins', sans-serif;
     background: #121212;
     color: #f0f0f0;
+    line-height: 1.6;
 }
+
+
 
 /* === Navbar tweaks === */
 .navbar {
-    background-color: #1e1e1e !important;
+    background-color: #1a1a1a !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 .navbar-brand {
     font-weight: 600;
     color: #00d4ff !important;
-    text-shadow: 0 0 4px #00d4ff;
+    letter-spacing: 1px;
 }
 
 .nav-link {
-    color: #00ffcc !important;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+    color: #b3fff0 !important;
+    transition: all 0.3s ease;
 }
 
 .nav-link:hover {
-    color: #00d4ff !important;
-    text-shadow: 0 0 6px #00d4ff;
+    color: #00e6ff !important;
+    text-shadow: 0 0 6px rgba(0,230,255,0.6);
 }
 
 /* === Cards === */
-.card {
-    background-color: #1e1e1e;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0,255,204,0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.card, .modern-card {
+    background: #1b1b1b;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
 }
 
-.card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 25px rgba(0,255,204,0.3);
+.card:hover, .modern-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,255,204,0.25);
+    box-shadow: 0 6px 20px rgba(0,255,204,0.1);
 }
 
 /* === Form Inputs === */
 .form-control {
-    background-color: rgba(255,255,255,0.08);
+    background-color: rgba(255,255,255,0.12);
     color: #fff;
-    border: 1px solid #00ffcc;
+    border: 1px solid rgba(0,255,204,0.3);
     border-radius: 10px;
+    padding: 0.7rem;
     transition: all 0.3s ease;
+}
+
+.form-control::placeholder {
+    color: #b0b0b0;
 }
 
 .form-control:focus {
-    background-color: rgba(255,255,255,0.12);
+    background-color: rgba(255,255,255,0.18);
     border-color: #00d4ff;
     box-shadow: 0 0 8px rgba(0,212,255,0.3);
-    color: #fff;
+}
+
+.card-title {
+    color: #00e6ff; /* soft cyan that fits your theme */
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+.card-title:hover {
+    color: #1e1f1f; /* subtle hover change */
+}
+label, p, .form-label {
+    color: #e0e0e0 !important;
 }
 
 /* === Buttons === */
-.btn-primary {
-    background: linear-gradient(90deg, #00ffcc, #00d4ff);
+.btn-primary, .btn-modern {
+    background: linear-gradient(90deg, #00d4ff, #00bfa6);
     border: none;
+    color: #121212;
     font-weight: 600;
+    padding: 0.6rem 1.3rem;
+    border-radius: 8px;
     transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(0,212,255,0.5);
+.btn-primary:hover, .btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(0,212,255,0.4);
+}
+
+/* === Text & Title Effects === */
+.text-gradient {
+    background: linear-gradient(90deg, #00bcd4, #009688);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.text-gradient:hover {
+    transform: scale(1.02);
 }
 
 /* === Footer === */
 footer {
-    color: #00ffcc;
+    color: #9ef7e8;
     text-align: center;
     padding: 1rem 0;
     border-top: 1px solid rgba(0,255,204,0.2);
+    margin-top: 3rem;
+}
+
+/* === Animations === */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+}
+.fade-in-slow {
+    opacity: 0;
+    animation: fadeIn 2s ease forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* === Responsive tweaks === */
 @media (max-width: 420px) {
     .card {
-        width: 90%;
+        width: 95%;
         margin: auto;
     }
     .navbar-nav {

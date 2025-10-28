@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+
+  <!-- Greeting -->
+  <div class="text-center mb-5">
+    <h2 class="fw-bold text-info">Welcome back, {{ current_user.username }} 👋</h2>
+    <p class="text-muted">Manage your profile, view courses, and explore your student space</p>
+  </div>
+
+  <!-- Info Cards -->
+  <div class="row g-4">
+    <!-- Profile Info -->
+    <div class="col-md-4">
+      <div class="card bg-gradient-dark border-0 shadow-lg h-100">
+        <div class="card-body">
+          <h5 class="card-title text-info">👤 Profile Info</h5>
+          <hr class="border-secondary">
+          <p><strong>Email:</strong> {{ current_user.email }}</p>
+          <p><strong>Joined:</strong> {{ current_user.created_at('%b %d, %Y') if current_user.created_at else 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- My Courses -->
+    <div class="col-md-4">
+      <div class="card bg-gradient-dark border-0 shadow-lg h-100">
+        <div class="card-body">
+          <h5 class="card-title text-info">📘 My Courses</h5>
+          <hr class="border-secondary">
+          <p>You are enrolled in <strong>{{ current_user.courses|length if current_user.courses else 0 }}</strong> course(s).</p>
+          <a href="/view_students" class="btn btn-outline-info btn-sm">View Courses</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="col-md-4">
+      <div class="card bg-gradient-dark border-0 shadow-lg h-100">
+        <div class="card-body">
+          <h5 class="card-title text-info">⚙️ Settings</h5>
+          <hr class="border-secondary">
+          <p>Manage your account and preferences.</p>
+          <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Students Overview Section -->
+  <div class="mt-5">
+    <h4 class="text-info mb-3">📋 Student Overview</h4>
+    <div class="table-responsive">
+      <table class="table table-dark table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Course</th>
+            <th>Year</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for student in students %}
+          <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.course }}</td>
+            <td>{{ student.year }}</td>
+            <td>
+              <a href="/edit/{{ student.id }}" class="btn btn-sm btn-outline-info">Edit</a>
+              <a href="/delete/{{ student.id }}" class="btn btn-sm btn-outline-danger">Delete</a>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="text-center text-muted">No students found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

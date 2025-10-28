@@ -1,16 +1,21 @@
-from flask import Flask, redirect, render_template,request,session
+from flask import Flask, redirect, render_template,request,session,flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 
 
 app=Flask(__name__)
+app.config['SECRET_KEY'] = 'supersecretkey123'  # 🔑 change this to something secure later
 
 app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///student_portal.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
 
 db=SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
 
-class User(db.Model):
+class User(db.Model,UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50),nullable=False)
@@ -30,9 +35,12 @@ class Student(db.Model):
 
 @app.route('/')
 def home():
-    return render_template("layout.html")
+    return render_template("home.html")
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit_student(id):
@@ -46,6 +54,11 @@ def edit_student(id):
         return redirect('/view_students')
     
     return render_template('edit_student.html', student=student)
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    student=Student.query.all()
+    return render_template("dashboard.html",students=student)
 
 @app.route('/delete/<int:id>',methods=['GET','POST'])
 def delete_student(id):
@@ -77,15 +90,22 @@ def login():
         password_input=request.form['password']
         user = User.query.filter_by(email=email_input).first()
         if user and user.check_password(password_input):
-            return redirect("/")
+            login_user(user)
+            flash("Student added successfully!", "success")
+            return redirect('/dashboard')
         else:
             error_msg="USER NOT FOUND"
             
     return render_template('login.html',error_msg=error_msg)
     #start debug here
     
-    
-    
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
+
+
 @app.route('/view_students')
 def view_student():
     student=Student.query.all()
@@ -93,6 +113,7 @@ def view_student():
 
 
 @app.route('/add_students',methods=['GET', 'POST'])
+@login_required
 def add_students():
     if request.method =='POST':
         name=request.form['name']

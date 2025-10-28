@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% block title %}Home | Student Portal{% endblock %}
+
+{% block content %}
+<div class="text-center my-5 fade-in">
+  <h1 class="fw-bold display-5 text-gradient">Welcome to Student Portal</h1>
+  <p class="lead text-secondary mt-3">A modern way to manage student records efficiently and securely.</p>
+    <a href="/login" class="btn btn-primary btn-lg mt-4">Get Started</a>
+</div>
+
+<!-- Subtle feature cards -->
+<div class="row mt-5 g-4">
+  <div class="col-md-4">
+    <div class="card modern-card text-center p-4">
+      <h5 class="text-info mb-3">Smart Dashboard</h5>
+      <p class="text-secondary">Monitor and manage your student data from a clean, organized interface.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card modern-card text-center p-4">
+      <h5 class="text-info mb-3">Fast Operations</h5>
+      <p class="text-secondary">Add, edit, and view records seamlessly with optimized database handling.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card modern-card text-center p-4">
+      <h5 class="text-info mb-3">Secure Access</h5>
+      <p class="text-secondary">Your information is safe with encrypted authentication and protected routes.</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
