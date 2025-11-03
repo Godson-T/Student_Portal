@@ -1,32 +1,50 @@
 {% extends 'layout.html' %}
-{% block title %}Home | Student Portal{% endblock %}
+{% block title %}Student Portal{% endblock %}
 
 {% block content %}
-<div class="text-center my-5 fade-in">
-  <h1 class="fw-bold display-5 text-gradient">Welcome to Student Portal</h1>
-  <p class="lead text-secondary mt-3">A modern way to manage student records efficiently and securely.</p>
-    <a href="/login" class="btn btn-primary btn-lg mt-4">Get Started</a>
+<div class="text-center my-16 fade-in">
+  <h1 class="text-5xl font-extrabold bg-gradient-to-r from-cyan-400 to-emerald-300 bg-clip-text text-transparent">
+    Welcome to Student Portal
+  </h1>
+  <p class="text-gray-400 text-lg mt-4 max-w-2xl mx-auto">
+    A futuristic way to manage student records — fast, secure, and beautifully efficient.
+  </p>
+  <a href="/login" 
+     class="inline-block mt-8 px-6 py-3 rounded-lg font-semibold text-gray-900 
+            bg-gradient-to-r from-cyan-400 to-emerald-400 
+            hover:scale-105 hover:shadow-[0_0_20px_rgba(0,255,204,0.4)] 
+            transition-all duration-300">
+     🚀 Get Started
+  </a>
 </div>
 
-<!-- Subtle feature cards -->
-<div class="row mt-5 g-4">
-  <div class="col-md-4">
-    <div class="card modern-card text-center p-4">
-      <h5 class="text-info mb-3">Smart Dashboard</h5>
-      <p class="text-secondary">Monitor and manage your student data from a clean, organized interface.</p>
-    </div>
+<!-- Feature Section -->
+<div class="grid md:grid-cols-3 gap-8 mt-20 px-6 max-w-6xl mx-auto">
+  <div class="p-6 rounded-2xl bg-gradient-to-br from-[#141414] to-[#1c1c1c] 
+              border border-cyan-500/10 shadow-lg hover:-translate-y-2 
+              transition-all duration-300">
+    <h5 class="text-cyan-400 font-semibold text-xl mb-3 text-center">📊 Smart Dashboard</h5>
+    <p class="text-gray-400 text-sm text-center">
+      Monitor and manage student data through a clean, data-driven interface.
+    </p>
   </div>
-  <div class="col-md-4">
-    <div class="card modern-card text-center p-4">
-      <h5 class="text-info mb-3">Fast Operations</h5>
-      <p class="text-secondary">Add, edit, and view records seamlessly with optimized database handling.</p>
-    </div>
+
+  <div class="p-6 rounded-2xl bg-gradient-to-br from-[#141414] to-[#1c1c1c] 
+              border border-cyan-500/10 shadow-lg hover:-translate-y-2 
+              transition-all duration-300">
+    <h5 class="text-cyan-400 font-semibold text-xl mb-3 text-center">⚡ Fast Operations</h5>
+    <p class="text-gray-400 text-sm text-center">
+      Add, edit, and view records seamlessly with optimized database handling.
+    </p>
   </div>
-  <div class="col-md-4">
-    <div class="card modern-card text-center p-4">
-      <h5 class="text-info mb-3">Secure Access</h5>
-      <p class="text-secondary">Your information is safe with encrypted authentication and protected routes.</p>
-    </div>
+
+  <div class="p-6 rounded-2xl bg-gradient-to-br from-[#141414] to-[#1c1c1c] 
+              border border-cyan-500/10 shadow-lg hover:-translate-y-2 
+              transition-all duration-300">
+    <h5 class="text-cyan-400 font-semibold text-xl mb-3 text-center">🔐 Secure Access</h5>
+    <p class="text-gray-400 text-sm text-center">
+      Your data stays protected with encrypted authentication and secure routing.
+    </p>
   </div>
 </div>
 

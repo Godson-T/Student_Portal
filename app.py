@@ -2,6 +2,7 @@ from flask import Flask, redirect, render_template,request,session,flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
+from sqlalchemy import func
 
 
 app=Flask(__name__)
@@ -33,6 +34,8 @@ class Student(db.Model):
     course=db.Column(db.String(50),nullable=False)
     year=db.Column(db.String(5),nullable=False)
 
+
+
 @app.route('/')
 def home():
     return render_template("home.html")
@@ -43,6 +46,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_student(id):
     student=Student.query.get_or_404(id)
     if request.method== 'POST' :
@@ -57,10 +61,17 @@ def edit_student(id):
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    student=Student.query.all()
-    return render_template("dashboard.html",students=student)
+    recent_added=Student.query.order_by(Student.id.desc()).limit(5).all()
+    total_student=Student.query.count()
+    total_courses=Student.query.distinct(Student.course).count()
+    data = db.session.query(Student.course, func.count(Student.id)).group_by(Student.course).all()
+    courses = [row[0] for row in data]
+    counts = [row[1] for row in data]
+    
+    return render_template("dashboard.html",courses=courses, counts=counts,total_student=total_student,total_courses=total_courses, recent_added=recent_added)
 
 @app.route('/delete/<int:id>',methods=['GET','POST'])
+@login_required
 def delete_student(id):
     student=Student.query.get_or_404(id)
     db.session.delete(student)
@@ -97,8 +108,7 @@ def login():
             error_msg="USER NOT FOUND"
             
     return render_template('login.html',error_msg=error_msg)
-    #start debug here
-    
+  
 @app.route("/logout")
 @login_required
 def logout():
@@ -128,7 +138,13 @@ def add_students():
     
     return render_template("add_student.html")
 
-    
+
+@app.route("/student/<int:id>")
+def student_details(id):
+    student=Student.query.get_or_404(id)
+    return render_template("student.html",student=student)
+
+
 
 
 if __name__ == "__main__":

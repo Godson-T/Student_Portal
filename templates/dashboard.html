@@ -2,82 +2,84 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="min-h-screen bg-[#0a0a0a] text-gray-200 font-inter p-6 fade-in">
 
   <!-- Greeting -->
-  <div class="text-center mb-5">
-    <h2 class="fw-bold text-info">Welcome back, {{ current_user.username }} 👋</h2>
-    <p class="text-muted">Manage your profile, view courses, and explore your student space</p>
+  <div class="text-center mb-10">
+    <h2 class="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">
+      Welcome back, {{ current_user.username }}
+    </h2>
+    <p class="text-gray-400 mt-2">
+      Manage your profile, view courses, and explore your student space.
+    </p>
   </div>
 
-  <!-- Info Cards -->
-  <div class="row g-4">
+  <!-- Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+
     <!-- Profile Info -->
-    <div class="col-md-4">
-      <div class="card bg-gradient-dark border-0 shadow-lg h-100">
-        <div class="card-body">
-          <h5 class="card-title text-info">👤 Profile Info</h5>
-          <hr class="border-secondary">
-          <p><strong>Email:</strong> {{ current_user.email }}</p>
-          <p><strong>Joined:</strong> {{ current_user.created_at('%b %d, %Y') if current_user.created_at else 'N/A' }}</p>
-        </div>
-      </div>
+    <div class="bg-[#121212] border border-cyan-500/10 rounded-2xl shadow-md hover:shadow-cyan-500/20 transition-all p-5">
+      <h5 class="text-cyan-400 font-semibold mb-3">👤 Profile Info</h5>
+      <hr class="border-cyan-500/10 mb-3">
+      <p><strong>Email:</strong> {{ current_user.email }}</p>
+      <p><strong>Joined:</strong> {{ current_user.created_at('%b %d, %Y') if current_user.created_at else 'N/A' }}</p>
     </div>
 
     <!-- My Courses -->
-    <div class="col-md-4">
-      <div class="card bg-gradient-dark border-0 shadow-lg h-100">
-        <div class="card-body">
-          <h5 class="card-title text-info">📘 My Courses</h5>
-          <hr class="border-secondary">
-          <p>You are enrolled in <strong>{{ current_user.courses|length if current_user.courses else 0 }}</strong> course(s).</p>
-          <a href="/view_students" class="btn btn-outline-info btn-sm">View Courses</a>
-        </div>
-      </div>
+    <div class="bg-[#121212] border border-cyan-500/10 rounded-2xl shadow-md hover:shadow-cyan-500/20 transition-all p-5">
+      <h5 class="text-cyan-400 font-semibold mb-3">📘 My Courses</h5>
+      <hr class="border-cyan-500/10 mb-3">
+      <p>You are enrolled in <strong>{{ total_course }}</strong> courses.</p>
+      <a href="/view_students" class="inline-block mt-3 bg-gradient-to-r from-cyan-400 to-emerald-400 text-[#0a0a0a] font-semibold px-4 py-2 rounded-lg hover:scale-105 transition">
+        View Courses
+      </a>
+    </div>
+
+    <!-- Total Students -->
+    <div class="bg-[#121212] border border-cyan-500/10 rounded-2xl shadow-md hover:shadow-cyan-500/20 transition-all p-5">
+      <h5 class="text-cyan-400 font-semibold mb-3">👩‍🎓 Total Students</h5>
+      <hr class="border-cyan-500/10 mb-3">
+      <p>You are managing <strong>{{ total_student }}</strong> students.</p>
+      <a href="/view_students" class="inline-block mt-3 bg-gradient-to-r from-cyan-400 to-emerald-400 text-[#0a0a0a] font-semibold px-4 py-2 rounded-lg hover:scale-105 transition">
+        View Students
+      </a>
     </div>
 
     <!-- Settings -->
-    <div class="col-md-4">
-      <div class="card bg-gradient-dark border-0 shadow-lg h-100">
-        <div class="card-body">
-          <h5 class="card-title text-info">⚙️ Settings</h5>
-          <hr class="border-secondary">
-          <p>Manage your account and preferences.</p>
-          <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
-        </div>
-      </div>
+    <div class="bg-[#121212] border border-cyan-500/10 rounded-2xl shadow-md hover:shadow-cyan-500/20 transition-all p-5">
+      <h5 class="text-cyan-400 font-semibold mb-3">⚙️ Settings</h5>
+      <hr class="border-cyan-500/10 mb-3">
+      <p>Manage your account and preferences.</p>
+      <a href="/logout" class="inline-block mt-3 bg-gradient-to-r from-rose-500 to-red-600 text-white font-semibold px-4 py-2 rounded-lg hover:scale-105 transition">
+        Logout
+      </a>
     </div>
   </div>
 
-  <!-- Students Overview Section -->
-  <div class="mt-5">
-    <h4 class="text-info mb-3">📋 Student Overview</h4>
-    <div class="table-responsive">
-      <table class="table table-dark table-hover align-middle">
-        <thead class="table-dark">
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Course</th>
-            <th>Year</th>
-            <th>Actions</th>
+  <!-- Recent Students -->
+  <div class="bg-[#121212] border border-cyan-500/10 rounded-2xl shadow-md p-6 mb-10">
+    <h4 class="text-cyan-400 text-lg font-semibold mb-4">🆕 Recently Added Students</h4>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-[#0f1a1a] text-cyan-400 border-b border-cyan-500/10">
+            <th class="px-4 py-3 font-semibold">Name</th>
+            <th class="px-4 py-3 font-semibold">Email</th>
+            <th class="px-4 py-3 font-semibold">Course</th>
+            <th class="px-4 py-3 font-semibold">Year</th>
           </tr>
         </thead>
         <tbody>
-          {% for student in students %}
-          <tr>
-            <td>{{ student.name }}</td>
-            <td>{{ student.email }}</td>
-            <td>{{ student.course }}</td>
-            <td>{{ student.year }}</td>
-            <td>
-              <a href="/edit/{{ student.id }}" class="btn btn-sm btn-outline-info">Edit</a>
-              <a href="/delete/{{ student.id }}" class="btn btn-sm btn-outline-danger">Delete</a>
-            </td>
+          {% for student in recent_added %}
+          <tr class="border-b border-cyan-500/10 hover:bg-[#162020] transition">
+            <td class="px-4 py-3">{{ student.name }}</td>
+            <td class="px-4 py-3">{{ student.email }}</td>
+            <td class="px-4 py-3">{{ student.course }}</td>
+            <td class="px-4 py-3">{{ student.year }}</td>
           </tr>
           {% else %}
           <tr>
-            <td colspan="5" class="text-center text-muted">No students found.</td>
+            <td colspan="4" class="text-center text-gray-500 py-3">No recent students found.</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -85,5 +87,80 @@
     </div>
   </div>
 
+  <!-- Chart -->
+  <div class="bg-[#121212] border border-cyan-500/10 rounded-2xl shadow-md p-6">
+    <div id="courseChart"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script>
+    const courseNames = {{ courses|tojson|safe }};
+    const courseCounts = {{ counts|tojson|safe }};
+
+    const options = {
+      chart: {
+        type: 'line',
+        height: 380,
+        background: '#121212',
+        foreColor: '#e0e0e0',
+        toolbar: { show: false }
+      },
+      title: {
+        text: 'Student Distribution by Course',
+        align: 'center',
+        style: {
+          color: '#67e8f9',
+          fontSize: '20px',
+          fontWeight: '600'
+        }
+      },
+      series: [{
+        name: 'Students',
+        data: courseCounts
+      }],
+      xaxis: {
+        categories: courseNames,
+        title: { text: 'Courses', style: { color: '#9ca3af' } },
+        labels: { style: { colors: '#9ca3af' } }
+      },
+      yaxis: {
+        title: { text: 'Student Count', style: { color: '#9ca3af' } },
+        labels: { style: { colors: '#9ca3af' } }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 3
+      },
+      colors: ['#22d3ee'],
+      markers: {
+        size: 5,
+        colors: ['#0a0a0a'],
+        strokeColors: '#22d3ee',
+        strokeWidth: 2
+      },
+      grid: {
+        borderColor: '#1f2937'
+      },
+      tooltip: {
+        theme: 'dark',
+        y: {
+          formatter: val => `${val} students`
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'dark',
+          shadeIntensity: 0.8,
+          opacityFrom: 0.7,
+          opacityTo: 0.2,
+          stops: [0, 90, 100],
+          gradientToColors: ['#34d399']
+        }
+      }
+    };
+    const chart = new ApexCharts(document.querySelector("#courseChart"), options);
+    chart.render();
+  </script>
 </div>
 {% endblock %}
