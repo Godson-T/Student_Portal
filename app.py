@@ -100,8 +100,9 @@ def register():
     return render_template('register.html')
 
 def send_otp(to_email, otp):
-    sender_email = "godsont259@gmail.com"
-    sender_pass = "gtxu mgkt vuhl yilj"
+    #enter your sender email and App password
+    sender_email = ""
+    sender_pass = ""
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "OTP Verification"
@@ -168,8 +169,9 @@ def view_student():
 
 
 def send_welcome_email(to_email, student_name, course):
-    sender_email = "godsont259@gmail.com"
-    sender_pass = "gtxu mgkt vuhl yilj"
+       #enter your sender email and App password
+    sender_email = ""
+    sender_pass = ""
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "🎉 Welcome to Student Portal!"
