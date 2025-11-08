@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template,request,session,flash  # noqa: F401
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import exists
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from sqlalchemy import func
@@ -126,12 +127,14 @@ def login():
         if user and user.check_password(password_input):
             otp = str(random.randint(100000, 999999))
             session['otp'] = otp
+            session['otp_purpose'] = "login"
             session['pending_user'] = user.id
             Thread(target=send_otp, args=(email_input, otp)).start()
-
-            return redirect('verify_otp')
+            
+            return redirect('/verify_otp')
         else:
-            error_msg="USER NOT FOUND"
+            flash("USER NOT FOUND","danger")
+            return redirect
             
     return render_template('login.html',error_msg=error_msg)
 
@@ -141,17 +144,26 @@ def verify_otp():
         entered_otp=request.form.get('otp', '').strip()
         stored_otp = str(session.get('otp', '')).strip()
         if entered_otp==stored_otp:
-            user_id=session['pending_user']
-            user=User.query.get(user_id)
+            purpose = session.get("otp_purpose")
+            if purpose=='login':
+                user_id=session['pending_user']
+                user=User.query.get(user_id)
 
-            login_user(user)
-            session.pop('otp', None)
-            session.pop('pending_user', None)
-            flash("User login successfull","success")
-            return redirect('/dashboard')
+                login_user(user)
+                session.pop('otp', None)
+                session.pop('otp_purpose',None)
+                session.pop('pending_user', None)
+                flash("User login successfull","success")
+                return redirect('/dashboard')
+            
+            elif purpose=="reset_password":
+                session.pop('otp', None)
+                session.pop('otp_purpose',None)
+                return redirect('/reset_password')  
         else:
             flash("Incorrect OTP. Try again.", "danger")
-            return redirect('/verify_otp')
+            
+            
     return render_template('verify_otp.html')
    
 @app.route("/logout")
@@ -204,8 +216,49 @@ def add_students():
     
     return render_template("add_student.html")
 
+@app.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    if 'reset_email' not in session:
+        return redirect('/forget_password')
+    if request.method=='POST':
+        new_pass=request.form.get('new_password')
+        conform_pass=request.form.get('confirm_password')
+        if new_pass!=conform_pass:
+            return render_template("reset_password.html", error="Passwords do not match")
+        hashed_password=generate_password_hash(new_pass)
+        user=User.query.filter_by(email=session['reset_email']).first()
+        user.password = hashed_password
+        db.session.commit()
+        session.pop('reset_email', None)
+        
+        flash("Password reset successfully. Please login.", "success")
+        return redirect('/login')
+    return render_template("reset_password.html")
 
+@app.route("/forget_password",methods=['GET','POST'])
+def forget_password():
+    if request.method=='POST':
+        email=request.form['email']
+        if not email:
+            flash("Session expired. Try again.", "error")
+            return redirect('/forget_password')
+        user_exists = User.query.filter_by(email=email).first()
+        
+        if not user_exists:
+            flash("User not found.", "error")
+            return redirect('/forget_password')
+        elif user_exists:
+            otp = str(random.randint(100000, 999999))
+            session['otp'] = otp
+            session['otp_purpose'] = "reset_password"
+            session['reset_email']=email
+            Thread(target=send_otp,args=(email,otp)).start()
+            return redirect ('/verify_otp')
+        else:
+            flash("User does not exist", "error")
+    return render_template('/forget_password.html')
 
+       
 @app.route("/student/<int:id>")
 def student_details(id):
     student=Student.query.get_or_404(id)
