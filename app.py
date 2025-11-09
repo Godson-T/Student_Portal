@@ -9,7 +9,10 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import random
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 app=Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey123'  # 🔑 change this to something secure later
@@ -70,7 +73,7 @@ def edit_student(id):
 def dashboard():
     recent_added=Student.query.order_by(Student.id.desc()).limit(5).all()
     total_student=Student.query.count()
-    total_courses=Student.query.distinct(Student.course).count()
+    total_courses = Student.query.distinct(Student.course).count()
     data = db.session.query(Student.course, func.count(Student.id)).group_by(Student.course).all()
     courses = [row[0] for row in data]
     counts = [row[1] for row in data]
@@ -101,9 +104,9 @@ def register():
     return render_template('register.html')
 
 def send_otp(to_email, otp):
-    #enter your sender email and App password
-    sender_email = ""
-    sender_pass = ""
+    sender_email = os.getenv("EMAIL_USER")
+    sender_pass = os.getenv("EMAIL_PASS")
+
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "OTP Verification"
@@ -131,12 +134,11 @@ def login():
             session['otp_purpose'] = "login"
             session['pending_user'] = user.id
             Thread(target=send_otp, args=(email_input, otp)).start()
-            
             return redirect('/verify_otp')
+        
         else:
             flash("USER NOT FOUND","danger")
-            return redirect
-            
+            return redirect('/login')
     return render_template('login.html',error_msg=error_msg)
 
 @app.route("/verify_otp" ,methods=['GET','POST'])
@@ -161,6 +163,8 @@ def verify_otp():
                 session.pop('otp', None)
                 session.pop('otp_purpose',None)
                 return redirect('/reset_password')  
+          
+                
         else:
             flash("Incorrect OTP. Try again.", "danger")
             
@@ -181,9 +185,9 @@ def view_student():
 
 
 def send_welcome_email(to_email, student_name, course):
-       #enter your sender email and App password
-    sender_email = ""
-    sender_pass = ""
+    sender_email = os.getenv("EMAIL_USER")
+    sender_pass = os.getenv("EMAIL_PASS")
+
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = "🎉 Welcome to Student Portal!"
@@ -227,12 +231,15 @@ def reset_password():
         conform_pass=request.form.get('confirm_password')
         if new_pass!=conform_pass:
             return render_template("reset_password.html", error="Passwords do not match")
-        hashed_password=generate_password_hash(new_pass)
+        
         user=User.query.filter_by(email=session['reset_email']).first()
-        user.password = hashed_password
+        if  not user:
+            flash("User not found", "error")
+            return redirect('/forget_password')
+        user.password =generate_password_hash(new_pass)
+            
         db.session.commit()
         session.pop('reset_email', None)
-        
         flash("Password reset successfully. Please login.", "success")
         return redirect('/login')
     return render_template("reset_password.html")
@@ -259,6 +266,15 @@ def forget_password():
         else:
             flash("User does not exist", "error")
     return render_template('/forget_password.html')
+@app.route("/request_change_password")
+def request_change_password():
+    otp = str(random.randint(100000, 999999))
+    session["otp"] = otp
+    session["otp_purpose"] = "reset_password"
+    session["reset_email"] = current_user.email
+    Thread(target=send_otp,args=(current_user.email,otp)).start()
+    flash("OTP has been sent to your registered email.", "info")
+    return redirect('/verify_otp')
 
        
 @app.route("/student/<int:id>")
@@ -266,8 +282,10 @@ def student_details(id):
     student=Student.query.get_or_404(id)
     return render_template("student.html",student=student)
 
-
-
+@app.route("/profile/")
+@login_required
+def profile():
+    return render_template("profile.html", user=current_user)
 
 if __name__ == "__main__":
     app.run(debug=True)

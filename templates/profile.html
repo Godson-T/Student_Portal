@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="bg-sky-900">
+    <div>
+        <div class="bg-gradient-to-r from-blue-900 to-purple-900 px-8 py-6">
+            <div class="flex items-center space-x-6">
+                <div class="w-24 h-24 rounded-full bg-gray-800 flex items-center justify-center text-3xl font-bold text-blue-400">
+                    {{ user.username[0] }}
+                </div>
+                <div class="text-white">
+                    <h2 class="text-2xl font-bold">{{ user.username }}</h2>
+                    <p class="text-blue-300">Student Profile</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="grid md:grid-cols-2 gap-8 p-8">
+            <!-- Left Column -->
+            <div class="space-y-6">
+                <div class="bg-gray-800 rounded-lg p-6 backdrop-blur-lg border border-cyan-500/20 shadow-2xl">
+                    <h3 class="text-lg font-semibold text-gray-100 mb-4">Personal Information</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-blue-400 w-5"></i>
+                            <span class="ml-3 text-gray-300">Email : {{ user.email }}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-circle text-green-400 w-5"></i>
+                            <span class="ml-3 text-gray-300">Status : <span class="text-green-500"><b>Active</b></span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="space-y-6">
+                <div class="bg-gray-800 rounded-lg p-6 backdrop-blur-lg border border-cyan-500/20 shadow-2xl">
+                    <h3 class="text-lg font-semibold text-gray-100 mb-4">Quick Access</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <a href="/dashboard" class="flex items-center p-3 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors">
+                            <span class="text-xl mr-2">📊</span>
+                            <span class="text-gray-300">Dashboard</span>
+                        </a>
+                        <a href="/attendance" class="flex items-center p-3 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors">
+                            <span class="text-xl mr-2">📅</span>
+                            <span class="text-gray-300">Attendance</span>
+                        </a>
+                        <a href="/grades" class="flex items-center p-3 bg-gray-700 rounded-md hover:bg-gray-600 transition-colors">
+                            <span class="text-xl mr-2">📊</span>
+                            <span class="text-gray-300">Grades</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex justify-between">
+                    <a href="/dashboard" class="text-blue-400 hover:text-blue-300">← Back</a>
+                    <a href="/request_change_password" class="text-blue-400 hover:text-blue-300">Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
