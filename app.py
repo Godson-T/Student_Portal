@@ -1,6 +1,6 @@
-from flask import Flask, redirect, render_template,request,session,flash  # noqa: F401
+from flask import Flask, redirect, render_template,request,session,flash 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import exists
+from sqlalchemy.sql import exists,or_
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 from sqlalchemy import func
@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 import random
 from dotenv import load_dotenv
 import os
+
 
 load_dotenv()
 
@@ -180,10 +181,46 @@ def logout():
 
 @app.route('/view_students')
 def view_student():
-    student=Student.query.all()
-    return render_template('view_student.html',students=student)
+    page = request.args.get('page', 1, type=int)
+    search = request.args.get('search', '', type=str)
 
+    per_page = 5
 
+    query = Student.query
+
+    if search:
+        query = query.filter(
+            or_(
+                Student.name.ilike(f"%{search}%"),
+                Student.email.ilike(f"%{search}%")
+            )
+        )
+
+    students = query.paginate(page=page, per_page=per_page, error_out=False)
+
+    return render_template(
+        'view_student.html',
+        students=students.items,
+        page=page,
+        total_pages=students.pages,
+        search=search
+    )
+"""
+@app.route('/view_students')
+def view_student():
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
+
+    students = Student.query.paginate(page=page, per_page=per_page, error_out=False)
+
+    return render_template(
+        'view_student.html',
+        students=students.items,
+        page=page,
+        total_pages=students.pages
+    )
+
+"""
 def send_welcome_email(to_email, student_name, course):
     sender_email = os.getenv("EMAIL_USER")
     sender_pass = os.getenv("EMAIL_PASS")
