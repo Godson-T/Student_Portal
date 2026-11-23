@@ -1,0 +1,72 @@
+# =============================================================================
+# Student Portal — .gitignore
+# =============================================================================
+
+# --- Environment & Secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.pyc
+
+# --- Virtual Environments ---
+venv/
+venv-*/
+.venv/
+env/
+ENV/
+.Python
+
+# --- Flask / SQLite Database ---
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# --- Distribution / Build ---
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+wheels/
+
+# --- Testing ---
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+
+# --- IDE & Editor ---
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log
+logs/
+
+# --- Node (package-lock from Tailwind tooling) ---
+node_modules/
+npm-debug.log*
+
+# --- OS ---
+desktop.ini
+ehthumbs.db
