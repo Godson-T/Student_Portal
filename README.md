@@ -289,10 +289,4 @@ Please ensure your code follows PEP 8 style guidelines and includes relevant com
 
 ---
 
-## License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
 <p align="center">Built with Flask and Tailwind CSS</p>
